@@ -1,0 +1,13 @@
+(Hi How are you.)
+(I am good, fine thank you.)
+The program to count sentences in a file is written in Scala. The structure of program is as follows:
+
+Spark is run in local mode, configured to use 8 logical cores and 8 GB of memory.
+
+A text file containing few sentences from a Wikipedia article is read as an RDD[String]. As the size of input file is low, the RDD is partitioned to just 2 partitions.
+
+A map transformation is performed on input RDD[String] which produces [sentence,1] as [key,value] pairs. The sentences are aggregated using reduceByKey transformation (reduceByKey performs shuffle, which is an expensive operation, but since number of partitions in RDD is low, difference in performance will be negligible) to produce [sentence, count] pairs.
+
+The output from above operation is further sorted by using 'sortByKey' transformation, to output sentences in sorted order.
+
+A third map transformation is performed on input RDD[String] which produces [sentence,1] as [key,value] pairs and it is followed by a count action, to count total number of sentences in the input file.
